@@ -41,7 +41,7 @@ keys = [
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
-    # Move windows between left/right columns or move up/down in current stack.  Moving out of range in Columns layout will create new column.
+    # Move windows between left/right columns or move up/down in curent stack.  Moving out of range in Columns layout will create new column.
     Key([mod, "shift"], "h", lazy.layout.shuffle_left(),
         desc="Move window to the left"),
     Key([mod, "shift"], "o", lazy.layout.shuffle_right(),
@@ -80,32 +80,27 @@ keys = [
 ]
 
 
-my_groups = {
-    1: Group("Home"),
-    2: Group("Dev"),
-    3: Group("Music"),
-    4: Group("Else"),
-}
 
-def get_key(name):
-    return [k for k, g in my_groups.items() if g.name ==name][0]
 
-groups = [my_groups[i] for i in my_groups]
+group_names = [("   SYS ", {'layout': 'monadtall'}),
+               ("   WEB ", {'layout': 'monadtall'}),
+               ("   CHAT ", {'layout': 'monadtall'}),
+               ("   DEV ", {'layout': 'monadtall'}),
+               (" 1 ", {'layout': 'monadtall'}),
+               (" 2 ", {'layout': 'monadtall'}),
+               (" 3 ", {'layout': 'monadtall'})
+               ]
+ 
+groups = [Group(name, **kwargs) for name, kwargs in group_names]
+ 
+for i, (name, kwargs) in enumerate(group_names, 1):
+    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))        # Switch to another group
+    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name))) # Send current window to another group
 
-for i in groups:
-    keys.extend([
-        # mod1 + letter of group = switch to group
-        Key([mod], str(get_key(i.name)), lazy.group[i.name].toscreen(),
-            desc="Switch to group {}".format(i.name)),
 
-        # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], str(get_key(i.name)), lazy.window.togroup(i.name, switch_group=True),
-            desc="Switch to & move focused window to group {}".format(i.name)),
-        # Or, use below if you prefer not to switch to that group.
-        # # mod1 + shift + letter of group = move focused window to group
-        # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-        #     desc="move focused window to group {}".format(i.name)),
-    ])
+
+
+
 
 layouts = [
     #layout.Columns(border_focus_stack=['#d75f5f', '#8f3d3d'], border_width=4),
@@ -139,7 +134,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='sans',
+    font='Caskaydia Cove Nerd Font',
     fontsize=15,
     padding=3,
 )
@@ -147,17 +142,15 @@ extension_defaults = widget_defaults.copy()
 
 fgg = "#c7d991"
 backgg = "#231d2e"
-
-
-colors = [["#282c34", "#282c34"], # panel background
-          ["#3d3f4b", "#434758"], # background for current screen tab
-          ["#ffffff", "#ffffff"], # font color for group names
-          ["#ff5555", "#ff5555"], # border line color for current tab
-          ["#74438f", "#74438f"], # border line color for 'other tabs' and color for 'odd widgets'
-          ["#4f76c7", "#4f76c7"], # color for the 'even widgets'
-          ["#e1acff", "#e1acff"], # window name
-          ["#ecbbfb", "#ecbbfb"]] # backbround for inactive screens
-
+colors = [["#2e3440", "#2e3440"],  
+          ["#4c566a", "#4c566a"], 
+          ["#88c0d0", "#88c0d0"], 
+          ["#434c5e", "#434c5e"], 
+          ["#3b4252", "#3b4252"], 
+          ["#81a1c1", "#81a1c1"], 
+          ["#5e81ac", "#5e81ac"], 
+          ["#eceff4", "#eceff4"],
+          ["#d8dee9", "#d8dee9"]]
 widget_defaults = dict(
     font="Ubuntu Mono",
     fontsize = 12,
@@ -171,23 +164,12 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                
-                              widget.Sep(
-                       linewidth = 0,
-                       padding = 6,
-                       foreground = colors[2],
-                       background = colors[0]
-                       ),
-#widget.CurrentLayout(), 
-              widget.Sep(
-                       linewidth = 0,
-                       padding = 6,
-                       foreground = colors[2],
-                       background = colors[0]
-                       ),
-              widget.GroupBox(
-                       font = "Ubuntu Bold",
-                       fontsize = 9,
+               widget.Sep(linewidth = 0, padding = 6, foreground = colors[2], background = colors[2]),
+           
+            #widget.Image(filename = "~/.config/qtile/icons/arch2.png",scale = "True", mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal)}),
+            widget.Sep(linewidth = 0, padding = 6, foreground = colors[2], background = colors[2]),
+            widget.Sep(linewidth = 0, padding = 6, foreground = colors[2], background = colors[0]),
+            widget.GroupBox(
                        margin_y = 3,
                        margin_x = 0,
                        padding_y = 5,
@@ -196,39 +178,32 @@ screens = [
                        active = colors[2],
                        inactive = colors[7],
                        rounded = False,
-                       highlight_color = colors[1],
+                       highlight_color = colors[3],
                        highlight_method = "line",
-                       this_current_screen_border = colors[6],
-                       this_screen_border = colors [4],
-                       other_current_screen_border = colors[6],
-                       other_screen_border = colors[4],
+                       this_current_screen_border = colors[2],
+                       this_screen_border = colors [2],
                        foreground = colors[2],
-                       background = colors[0]
-                       ),
-              
-               widget.Sep(
-                       linewidth = 0,
-                       padding = 40,
-                       foreground = colors[2],
-                       background = colors[0]
-                       ),
-              widget.WindowName(
-                       foreground = colors[6],
                        background = colors[0],
-                       padding = 0
+                       fontsize = 16
                        ),
-              widget.Systray(
-                       background = colors[0],
-                       padding = 5
-                       ),
-
-              widget.Sep(
-                       linewidth = 0,
-                       padding = 6,
-                       foreground = colors[0],
-                       background = colors[0]
-                       ),
-              widget.TextBox(
+                widget.Sep(linewidth = 0, padding = 6, background = colors[0]),
+                widget.Sep(linewidth = 0, padding = 6, background = colors[4]),
+                widget.Prompt(),
+                widget.WindowName(background= colors[4], foreground = colors[2]),
+                widget.Chord(
+                    chords_colors={
+                        'launch': ("#5e81ac", "#ffffff"),
+                    },
+                    name_transform=lambda name: name.upper(),
+                ),
+               
+ 
+                widget.Sep(linewidth = 0, padding = 6, foreground = colors[2], background = colors[4]),
+                widget.Systray(padding = 6, foreground = colors[2], background = colors[4]),
+                widget.Sep(linewidth = 0, padding = 12, foreground = colors[2], background = colors[4]),
+                widget.Sep(linewidth = 0, padding = 12, foreground = colors[2], background = colors[0]),
+                widget.Sep(linewidth = 0, padding = 3, foreground = colors[2], background = colors[2]),
+                widget.TextBox(
                        text = '',
                        background = colors[0],
                        foreground = colors[5],
@@ -331,6 +306,14 @@ widget.CurrentLayout(
                        format = "%A, %B %d - %H:%M "
                        ),
 
+                widget.CurrentLayoutIcon(
+                       custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
+                       background = colors[0],
+                       padding = 0,
+                       scale = 0.7
+                       ),
+                widget.Sep(linewidth = 0, padding = 12, foreground = colors[2], background = colors[0]), 
+
                       
             ],
             24,
@@ -384,7 +367,8 @@ wmname = "LG3D"
 
 
 runonstart = [
-    "feh --bg-fill /home/noisex/.config/qtile/arch.png",
+        "xrandr -s 1920x1080",
+    "feh --bg-fill ~/.config/qtile/arch.png",
     "picom --no-vsync &",
     #"rustyvibes /home/noisex/Descargas/Soundpacks/nk-cream &"
 ]
@@ -392,6 +376,3 @@ runonstart = [
 
 for i in runonstart:
     os.system(i)
-
-
-
