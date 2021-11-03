@@ -1,29 +1,3 @@
-# Copyright (c) 2010 Aldo Cortesi
-# Copyright (c) 2010, 2014 dequis
-# Copyright (c) 2012 Randall Ma
-# Copyright (c) 2012-2014 Tycho Andersen
-# Copyright (c) 2012 Craig Barnes
-# Copyright (c) 2013 horsik
-# Copyright (c) 2013 Tao Sauvage
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 from typing import List  # noqa: F401
 
 from libqtile import bar, layout, widget, extension
@@ -75,7 +49,7 @@ keys = [
 
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.run_extension(extension.DmenuRun(background="#486e39", selected_background="#97eb78", foreground="#c7d991" )),
+    Key([mod], "r", lazy.run_extension(extension.DmenuRun(background="#2e3440", selected_background="#88c0d0", foreground="#ffffff" )),
         desc="Spawn a command using a prompt widget"),
 ]
 
@@ -83,12 +57,12 @@ keys = [
 
 
 group_names = [("   SYS ", {'layout': 'monadtall'}),
-               ("   WEB ", {'layout': 'monadtall'}),
-               ("   CHAT ", {'layout': 'monadtall'}),
                ("   DEV ", {'layout': 'monadtall'}),
-               (" 1 ", {'layout': 'monadtall'}),
-               (" 2 ", {'layout': 'monadtall'}),
-               (" 3 ", {'layout': 'monadtall'})
+               ("   CHAT ", {'layout': 'monadtall'}),
+               ("   WEB ", {'layout': 'monadtall'}),
+              # (" 1 ", {'layout': 'monadtall'}),
+              # (" 2 ", {'layout': 'monadtall'}),
+              # (" 3 ", {'layout': 'monadtall'})
                ]
  
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
@@ -110,8 +84,8 @@ layouts = [
      #layout.Bsp(),
      #layout.Matrix(),
      layout.MonadTall(
-     border_normal="#486e39",
-     border_focus="#97eb78",
+     border_normal="#2e3440",
+     border_focus="#88c0d0",
      border_width=3,
      change_size= 10,
      single_border_width=0,
@@ -121,14 +95,14 @@ layouts = [
     # layout.MonadWide(),
      #layout.RatioTile(),
      layout.Tile(
-        border_normal="#486e39",
-        border_focus="#97eb78",
+        border_normal="#2e3440",
+        border_focus="#88c0d0",
         border_width=3,
         margin= 50,
         single_margin=10
     ),
      layout.Max(),
-     #layout.TreeTab(),
+     #layut.TreeTab(),
      #layout.VerticalTile(),
      #layout.Zoomy(),
 ]
@@ -164,7 +138,7 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-               widget.Sep(linewidth = 0, padding = 6, foreground = colors[2], background = colors[2]),
+               #widget.Sep(linewidth = 0, padding = 6, foreground = colors[2], background = colors[2]),
            
             #widget.Image(filename = "~/.config/qtile/icons/arch2.png",scale = "True", mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal)}),
             widget.Sep(linewidth = 0, padding = 6, foreground = colors[2], background = colors[2]),
@@ -192,7 +166,7 @@ screens = [
                 widget.WindowName(background= colors[4], foreground = colors[2]),
                 widget.Chord(
                     chords_colors={
-                        'launch': ("#5e81ac", "#ffffff"),
+                       'launch': ("#5e81ac", "#ffffff"),
                     },
                     name_transform=lambda name: name.upper(),
                 ),
@@ -201,21 +175,21 @@ screens = [
                 widget.Sep(linewidth = 0, padding = 6, foreground = colors[2], background = colors[4]),
                 widget.Systray(padding = 6, foreground = colors[2], background = colors[4]),
                 widget.Sep(linewidth = 0, padding = 12, foreground = colors[2], background = colors[4]),
-                widget.Sep(linewidth = 0, padding = 12, foreground = colors[2], background = colors[0]),
-                widget.Sep(linewidth = 0, padding = 3, foreground = colors[2], background = colors[2]),
+                #widget.Sep(linewidth = 0, padding = 12, foreground = colors[2], background = colors[0]),
+                #widget.Sep(linewidth = 0, padding = 3, foreground = colors[2], background = colors[2]),
                 widget.TextBox(
                        text = '',
-                       background = colors[0],
+                       background = colors[4],
                        foreground = colors[5],
-                       padding = -23,
-                       fontsize = 50,
+                       padding = -16,
+                       fontsize = 78
                        ),
               widget.TextBox(
                        text = '',
                        background = colors[5],
                        foreground = colors[4],
-                        padding = -23,
-                       fontsize = 50,
+                       padding = -16,
+                       fontsize = 78
                        ),
              widget.TextBox(
                        text = " 🌡",
@@ -234,8 +208,9 @@ screens = [
                        text='',
                        background = colors[4],
                        foreground = colors[5],
-                       padding = -23, fontsize = 50
-                       ), 
+                       padding = -16,
+                       fontsize = 78
+                       ),
               widget.TextBox(
                        text = " ⟳",
                        padding = 2,
@@ -243,12 +218,20 @@ screens = [
                        background = colors[5],
                        fontsize = 14
                        ),
-widget.TextBox(
+              widget.CheckUpdates(
+                       update_interval = 1800,
+                       distro = "Arch_checkupdates",
+                       display_format = "{updates} Updates",
+                       foreground = colors[2],
+                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e sudo pacman -Syu')},
+                       background = colors[5]
+                       ),
+              widget.TextBox(
                        text = '',
                        background = colors[5],
                        foreground = colors[4],
-                       padding = -23,
-                       fontsize = 50
+                       padding = -16,
+                       fontsize = 78
                        ),
               widget.TextBox(
                        text = " 🖬",
@@ -257,18 +240,18 @@ widget.TextBox(
                        padding = 0,
                        fontsize = 14
                        ),
-              widget.TextBox(
-                      text="noisex",
+              widget.Memory(
                        foreground = colors[2],
                        background = colors[4],
-                        padding = 5
+                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e htop')},
+                       padding = 5
                        ),
-widget.TextBox(
+              widget.TextBox(
                        text = '',
                        background = colors[4],
                        foreground = colors[5],
-                       padding = -23,
-                       fontsize = 50
+                       padding = -16,
+                       fontsize = 78
                        ),
               widget.TextBox(
                       text = " Vol:",
@@ -285,10 +268,10 @@ widget.TextBox(
                        text = '',
                        background = colors[5],
                        foreground = colors[4],
-                       padding = -23,
-                       fontsize = 50
+                       padding = -16,
+                       fontsize = 78
                        ),
-widget.CurrentLayout(
+              widget.CurrentLayout(
                        foreground = colors[2],
                        background = colors[4],
                        padding = 5
@@ -297,8 +280,8 @@ widget.CurrentLayout(
                        text = '',
                        background = colors[4],
                        foreground = colors[5],
-                       padding = -23,
-                       fontsize = 50
+                       padding = -16,
+                       fontsize = 78
                        ),
               widget.Clock(
                        foreground = colors[2],
@@ -306,15 +289,6 @@ widget.CurrentLayout(
                        format = "%A, %B %d - %H:%M "
                        ),
 
-                widget.CurrentLayoutIcon(
-                       custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
-                       background = colors[0],
-                       padding = 0,
-                       scale = 0.7
-                       ),
-                widget.Sep(linewidth = 0, padding = 12, foreground = colors[2], background = colors[0]), 
-
-                      
             ],
             24,
             fontsize = 37,
@@ -364,11 +338,8 @@ auto_minimize = True
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
-
-
 runonstart = [
-        "xrandr -s 1920x1080",
-    "feh --bg-fill ~/.config/qtile/arch.png",
+    "feh --bg-fill /home/noisex/.config/qtile/archnord.png",
     "picom --no-vsync &",
     #"rustyvibes /home/noisex/Descargas/Soundpacks/nk-cream &"
 ]
@@ -376,3 +347,6 @@ runonstart = [
 
 for i in runonstart:
     os.system(i)
+
+
+
